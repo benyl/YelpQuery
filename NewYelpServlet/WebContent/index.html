@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Cafe Search by NLP Approach</title>
+</head>
+<body>
+<CENTER>
+<div style='border:0px solid #DDDDDD; width:700px; margin-top:70px; padding-bottom:0'>
+<div style='padding-bottom:35px; padding-top:25px; background-color:; color:#336633; width:700px'>
+<H1 ALIGN="CENTER">Restaurant Finder using NLP Approach</H1>
+</div>
+<FORM ACTION="mainYelp" METHOD="get">
+  <div id='publishStatusTable' class='publishStatusTable'>
+  <table width="700" border="0" cellspacing="0" cellpadding="0" style="margin-bottom:0px;  background:#FAF8CC; padding-top:10; padding-bottom:10; border-top:1px dashed #DDDDDD; border-bottom:1px solid #DDDDDD">
+  <tr>
+    <td width="630" valign="top" style="padding:15px; padding-right:10px" align="right">
+	<INPUT TYPE="TEXT" NAME="restaurant_info" id="restaurant_info" class="restaurant_info" size='70' 
+  style="padding:2 0 2 0; border:3px solid #CCCCCC; font-size:14px; font-family:Georgia, 'Times New Roman', Times, serif; padding:3; 
+  height:25px; font-size:18px" onclick="if(this.value==' Input restaurant requirement')this.value=''" 
+  onmouseout="this.value=!this.value?' Input restaurant requirement':this.value;" 
+  onFocus="this.select()" onBlur="this.value=!this.value?' Input restaurant requirement':this.value;">
+	</td>
+    <td width="70" valign="top" style="padding:15px; padding-left:5px" align="left">
+	<INPUT TYPE="SUBMIT" VALUE="Search" style='border:1px solid #333333; padding:5 15 5 15; height:30px; 
+    font-size:16px; color:#FFFFFF; width:100px; background-color:#CC6600; cursor:pointer' onmouseover="this.style.background='#C35617'" 
+    onmouseout="this.style.background='#CC6600'"
+    onClick="var restaurant_info=document.getElementById('restaurant_info').value; if(restaurant_info==''||restaurant_info==' Input restaurant requirement'){ alert('Please enter something ok?'); return false;}">	
+    </td>
+  </tr>
+</table>
+</div>
+</FORM>
+</div>
+<div style='width:700px; height:30px; margin-top:30px; font-size:12px; line-height:150%' align='center'>
+CS9223 Natural Language Processing Project&nbsp;&nbsp;
+| &nbsp;&nbsp;Developed by <u>Yanbin Luo</u>, <u>Aizizi Yigaimu</u>&nbsp;&nbsp;
+| &nbsp;&nbsp;Supervised by Professor: <u>Shekhar Pradhan</u> 
+</div>
+<div style='width:400px; height:30px; margin-top:30px; font-size:14px; line-height:150%; padding:15px; background:#F5F5F5; border:1px solid #EEEEEE; height:130px' align='left'>
+<strong>+ &nbsp;User Instruction:</strong><br>
+&nbsp;&nbsp;&nbsp; This utility is developed as a course project in NYU-Poly<br>
+&nbsp;&nbsp;&nbsp; Restaurants info are represented closely to what you input<br>
+&nbsp;&nbsp;&nbsp; This tool only supports cafe searching in Broolyn, New York<br>
+&nbsp;&nbsp;&nbsp; If you have any question or interest, please email: <br>
+&nbsp;&nbsp;&nbsp; <em><u>yluo04@students.poly.edu</u></em> or <em><u>ayigai01@students.poly.edu</u></em><br>
+</div>
+</CENTER>
+</body>
+</html>

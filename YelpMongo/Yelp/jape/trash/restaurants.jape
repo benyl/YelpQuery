@@ -1,0 +1,30 @@
+Phase: restaurants
+Input: Token Lookup
+Options: control = appelt
+
+//=====================================================
+// match restaurant name
+//=====================================================
+Rule: Restaurants
+({Lookup.majorType == "restaurant"}):loc
+-->
+:loc {
+  AnnotationSet locs = (AnnotationSet) bindings.get("loc");
+  
+  FeatureMap features = Factory.newFeatureMap();
+
+  try{
+    String locStr = doc.getContent().getContent(
+	  locs.firstNode().getOffset(), locs.lastNode().getOffset()).toString();
+	
+    // create new features
+	features.put("title", "restaurant");
+    features.put("value", locStr);
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  
+  // create new annotation                            
+  outputAS.add(locs.firstNode(), locs.lastNode(), "location", features);
+}

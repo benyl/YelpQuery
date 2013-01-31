@@ -1,0 +1,33 @@
+Phase: Summary
+Input: cuisine location restaurant time feature question
+Options: control = appelt
+
+//=====================================================
+// summary
+//=====================================================
+Rule: Summary
+({question}):question
+-->
+:question {
+  AnnotationSet questionAs = (AnnotationSet) bindings.get("question");
+
+  for(Annotation qAnn:questionAs) {
+  
+    FeatureMap qFeatures = qAnn.getFeatures();
+
+    //=====================================================
+    // get cuisine location restaurants time
+	//=====================================================
+	String[] strArray = {"cuisine", "location", "restaurant", "time", "feature"};
+
+    for(String str:strArray) {
+      AnnotationSet anns = inputAS.get(str).getContained(
+        questionAs.firstNode().getOffset(),
+        questionAs.lastNode().getOffset());
+	  
+      for(Annotation ann:anns) {
+	      qFeatures.put(ann.getFeatures().get("title"), ann.getFeatures().get("value"));
+	    } // end of: for(Annotation ann:anns) {
+	} // end of: for(String str:strArray) {
+  } // end of: for(Annotation qAnn:questionAs) {
+}

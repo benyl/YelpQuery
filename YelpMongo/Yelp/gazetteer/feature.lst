@@ -1,0 +1,72 @@
+Outdoor Seating@kind=general@title=Outdoor Seating
+Waiter Service@kind=general@title=Waiter Service
+Wheelchair Accessible@kind=general@title=Wheelchair Accessible
+Delivery@kind=general@title=Delivery
+Take-out@kind=general@title=Take-out
+Caters@kind=general@title=Caters
+Coat Check@kind=general@title=Coat Check
+TV@kind=general@title=Has TV
+Kid@kind=goodfor@title=Good For Kids
+Kids@kind=goodfor@title=Good For Kids
+Group@kind=goodfor@title=Good For Groups
+Groups@kind=goodfor@title=Good For Groups
+Dancing@kind=goodfor@title=Good For Dancing
+Appointment@kind=allow@title=By Appointment Only
+Appointments@kind=allow@title=By Appointment Only
+Reservation@kind=allow@title=Takes Reservations
+Reservations@kind=allow@title=Takes Reservations
+Credit Card@kind=allow@title=Accepts Credit Cards
+Credit Cards@kind=allow@title=Accepts Credit Cards
+Dog@kind=allow@title=Dogs Allowed
+Dogs@kind=allow@title=Dogs Allowed
+Smoking@kind=allow@title=Smoking
+Breakfast@kind=meals@title=Good For
+Brunch@kind=meals@title=Good For
+Lunch@kind=meals@title=Good For
+Dinner@kind=meals@title=Good For
+Dessert@kind=meals@title=Good For
+Late Night@kind=meals@title=Good For
+wifi@kind=wifi@title=Wi-Fi@value=Yes
+wi-fi@kind=wifi@title=Wi-Fi@value=Yes
+free wifi@kind=wifi@title=Wi-Fi@value=free
+free wi-fi@kind=wifi@title=Wi-Fi@value=free
+paid wifi@kind=wifi@title=Wi-Fi@value=paid
+paid wi-fi@kind=wifi@title=Wi-Fi@value=paid
+Alcohol@kind=alcohol@title=Alcohol@value=Yes
+Full Bar@kind=alcohol@title=Alcohol@value=Full Bar
+Beer@kind=alcohol@title=Alcohol@value=Beer & Wine
+Wine@kind=alcohol@title=Alcohol@value=Beer & Wine
+Beers@kind=alcohol@title=Alcohol@value=Beer & Wine
+Wines@kind=alcohol@title=Alcohol@value=Beer & Wine
+Happy Hour@kind=alcohol@title=Alcohol@value=Happy Hour
+Street Parking@kind=parking@title=Parking@value=Street
+Garage@kind=parking@title=Parking@value=Garage
+Valet@kind=parking@title=Parking@value=Valet
+Private Lot@kind=parking@title=Parking@value=Private Lot
+Validated@kind=parking@title=Parking@value=Validated
+DJ@kind=music@title=Music
+Juke Box@kind=music@title=Music
+Karaoke@kind=music@title=Music
+Live@kind=music@title=Music
+loud@kind=noise@title=Noise Level@value=Loud
+noisy@kind=noise@title=Noise Level@value=Loud
+quiet@kind=noise@title=Noise Level@value=Quiet
+cheap@kind=price@title=Price Range@value=Inexpensive
+Inexpensive@kind=price@title=Price Range@value=Inexpensive
+Moderate@kind=price@title=Price Range@value=Moderate
+Spendy@kind=price@title=Price Range@value=Pricey
+Pricey@kind=price@title=Price Range@value=Pricey
+expensive@kind=price@title=Price Range@value=Pricey
+Splurge@kind=price@title=Price Range@value=Ultra High-End
+highend@kind=price@title=Price Range@value=Ultra High-End
+high-end@kind=price@title=Price Range@value=Ultra High-End
+Classy@kind=ambience@title=Ambience
+Divey@kind=ambience@title=Ambience
+Hipster@kind=ambience@title=Ambience
+Intimate@kind=ambience@title=Ambience
+Romantic@kind=ambience@title=Ambience
+Upscale@kind=ambience@title=Ambience
+Trendy@kind=ambience@title=Ambience
+Dressy@kind=attire@title=Attire
+Casual@kind=attire@title=Attire
+Formal@kind=attire@title=Attire

@@ -1,0 +1,73 @@
+Phase: Basic
+Input: Lookup
+Options: control = appelt
+
+//=====================================================
+// Create basic annotations
+//=====================================================
+Rule: basic1
+(
+  {Lookup.majorType == "indicator"} |
+  {Lookup.majorType == "feature"} |
+  {Lookup.majorType == "neighbor"}
+):ann
+-->
+:ann {
+  AnnotationSet anns = (AnnotationSet) bindings.get("ann");
+  
+  Annotation ann = (Annotation) anns.iterator().next();
+  FeatureMap lookupFeatures = ann.getFeatures();
+  
+  FeatureMap features = Factory.newFeatureMap();
+  features.putAll(lookupFeatures);
+  features.remove("majorType");
+
+  try{
+    String annStr = doc.getContent().getContent(
+	  anns.firstNode().getOffset(), anns.lastNode().getOffset()).toString();
+	
+    // create new features
+    features.put("string", annStr);
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  
+  // create new annotation
+  outputAS.add(anns.firstNode(), anns.lastNode(), lookupFeatures.get("majorType").toString(), features);
+}
+
+//=====================================================
+// Create basic annotations
+//=====================================================
+Rule: basic2
+(
+  {Lookup.majorType == "cuisine"} |
+  {Lookup.majorType == "restaurant"}
+):ann
+-->
+:ann {
+  AnnotationSet anns = (AnnotationSet) bindings.get("ann");
+  
+  Annotation ann = (Annotation) anns.iterator().next();
+  FeatureMap lookupFeatures = ann.getFeatures();
+  
+  FeatureMap features = Factory.newFeatureMap();
+  features.putAll(lookupFeatures);
+  features.remove("majorType");
+
+  try{
+    String annStr = doc.getContent().getContent(
+	  anns.firstNode().getOffset(), anns.lastNode().getOffset()).toString();
+	
+    // create new features
+    features.put("title", lookupFeatures.get("majorType").toString());
+    features.put("value", annStr);
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  
+  // create new annotation
+  outputAS.add(anns.firstNode(), anns.lastNode(), lookupFeatures.get("majorType").toString(), features);
+}

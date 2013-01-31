@@ -1,0 +1,60 @@
+outdoor seating@kind=general@title=cafe_outdoorseating
+waiter service@kind=general@title=cafe_tableservice
+wheelchair accessible@kind=general@title=cafe_wheelchairaccessible
+delivery@kind=general@title=cafe_delivery
+take-out@kind=general@title=cafe_takeout
+caters@kind=general@title=cafe_caters
+tv@kind=general@title=cafe_hastv
+kid@kind=goodfor@title=cafe_goodforkids
+kids@kind=goodfor@title=cafe_goodforkids
+group@kind=goodfor@title=cafe_goodforgroups
+groups@kind=goodfor@title=cafe_goodforgroups
+reservation@kind=allow@title=cafe_reservation
+reservations@kind=allow@title=cafe_reservation
+credit card@kind=allow@title=cafe_creditcards
+credit cards@kind=allow@title=cafe_creditcards
+breakfast@kind=meals@title=cafe_goodformeal
+brunch@kind=meals@title=cafe_goodformeal
+lunch@kind=meals@title=cafe_goodformeal
+dinner@kind=meals@title=cafe_goodformeal
+dessert@kind=meals@title=cafe_goodformeal
+late night@kind=meals@title=cafe_goodformeal
+wifi@kind=wifi@title=cafe_wifi@value=free
+wi-fi@kind=wifi@title=cafe_wifi@value=free
+free wifi@kind=wifi@title=cafe_wifi@value=free
+free wi-fi@kind=wifi@title=cafe_wifi@value=free
+paid wifi@kind=wifi@title=cafe_wifi@value=paid
+paid wi-fi@kind=wifi@title=cafe_wifi@value=paid
+alcohol@kind=alcohol@title=cafe_alcohol@value=full bar
+full bar@kind=alcohol@title=cafe_alcohol@value=full bar
+beer@kind=alcohol@title=cafe_alcohol@value=beer & wine
+wine@kind=alcohol@title=cafe_alcohol@value=beer & wine
+beers@kind=alcohol@title=cafe_alcohol@value=beer & wine
+wines@kind=alcohol@title=cafe_alcohol@value=beer & wine
+street parking@kind=parking@title=cafe_parking@value=street
+garage@kind=parking@title=cafe_parking@value=garage
+valet@kind=parking@title=cafe_parking@value=valet
+private lot@kind=parking@title=cafe_parking@value=private lot
+validated@kind=parking@title=cafe_parking@value=validated
+loud@kind=noise@title=cafe_noiselevel@value=loud
+noisy@kind=noise@title=cafe_noiselevel@value=loud
+quiet@kind=noise@title=cafe_noiselevel@value=quiet
+cheap@kind=price@title=cafe_price@value=$
+inexpensive@kind=price@title=cafe_price@value=$
+moderate@kind=price@title=cafe_price@value=$$
+spendy@kind=price@title=cafe_price@value=$$$
+pricey@kind=price@title=cafe_price@value=$$$
+expensive@kind=price@title=cafe_price@value=$$$
+splurge@kind=price@title=cafe_price@value=$$$$
+highend@kind=price@title=cafe_price@value=$$$$
+high-end@kind=price@title=cafe_price@value=$$$$
+classy@title=cafe_ambience@value=classy
+divey@title=cafe_ambience@value=divey
+hipster@title=cafe_ambience@value=hipster
+intimate@title=cafe_ambience@value=intimate
+romantic@title=cafe_ambience@value=romantic
+upscale@title=cafe_ambience@value=upscale
+trendy@title=cafe_ambience@value=trendy
+dressy@title=cafe_attire@value=dressy
+casual@title=cafe_attire@value=casual
+formal@title=cafe_attire@value=formal

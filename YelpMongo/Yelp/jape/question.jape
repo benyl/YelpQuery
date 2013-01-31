@@ -1,0 +1,75 @@
+Phase: Question
+Input: Token Lookup indicator restaurant
+Options: control = first
+
+//=====================================================
+// match question type (i.e. are there any restaurant / where is a restaurant nearby)
+//=====================================================
+Rule: Question1
+Priority: 50
+(
+  ({indicator.kind == question, indicator.title == "start"})
+  ({Token})*
+  ({indicator.kind == question, indicator.title == "restaurant"})
+  ({Token})*
+  ({Token.string == "?"} | {Token.string == "."})
+):question
+-->
+:question {
+  AnnotationSet questions = (AnnotationSet) bindings.get("question");
+  FeatureMap features = Factory.newFeatureMap();
+	  
+  // create new features
+  features.put("kind", "search new");
+
+  // create new annotation
+  outputAS.add(questions.firstNode(), questions.lastNode(), "question", features);
+}
+
+//=====================================================
+// match question type (i.e. where can i find the <restaurant name>)
+//=====================================================
+Rule: Question2
+Priority: 100
+(
+  ({indicator.kind == question, indicator.title == "start"})
+  ({Token})*
+  ({restaurant})
+  ({Token})*
+  ({Token.string == "?"} | {Token.string == "."})
+):question
+-->
+:question {
+  AnnotationSet questions = (AnnotationSet) bindings.get("question");
+  FeatureMap features = Factory.newFeatureMap();
+	  
+  // create new features
+  features.put("kind", "find address");
+
+  // create new annotation
+  outputAS.add(questions.firstNode(), questions.lastNode(), "question", features);
+}
+
+//=====================================================
+// match question type (i.e. does the <restaurant name> open now)
+//=====================================================
+Rule: Question3
+(
+  ({indicator.kind == question, indicator.title == "check"} | 
+   {indicator.string ==~ "(?i)is"} | {indicator.string ==~ "(?i)was"})
+  ({Token})*
+  ({restaurant})
+  ({Token})*
+  ({Token.string == "?"} | {Token.string == "."})
+):question
+-->
+:question {
+  AnnotationSet questions = (AnnotationSet) bindings.get("question");
+  FeatureMap features = Factory.newFeatureMap();
+	  
+  // create new features
+  features.put("kind", "check");
+
+  // create new annotation
+  outputAS.add(questions.firstNode(), questions.lastNode(), "question", features);
+}

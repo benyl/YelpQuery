@@ -1,0 +1,29 @@
+Phase: Cuisine
+Input: Token Lookup
+Options: control = appelt
+
+//=====================================================
+// match cuisine (i.e. has TV / doesn't have TV)
+//=====================================================
+Rule: Cuisine
+({Lookup.majorType == "cuisine"}):cuisine
+-->
+:cuisine {
+  AnnotationSet cuis = (AnnotationSet) bindings.get("cuisine");
+  
+  FeatureMap features = Factory.newFeatureMap();
+
+  try{
+    String cuiStr = doc.getContent().getContent(
+	  cuis.firstNode().getOffset(), cuis.lastNode().getOffset()).toString();
+	  
+    // create new features
+	features.put("title", "cuisine");
+    features.put("value", cuiStr);
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  // create new annotation                            
+  outputAS.add(cuis.firstNode(), cuis.lastNode(), "cuisine", features);
+}

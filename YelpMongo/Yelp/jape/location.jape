@@ -1,0 +1,141 @@
+Phase: Location
+Input: Token Lookup indicator neighbor
+Options: control = appelt
+
+//=====================================================
+// marco for address pattern
+// (i.e. 11 5th st, brookyn, NY, 11201 or east broadway, manhattan, new york)
+//=====================================================
+Macro: ADDRESS
+(
+  ( 
+   (
+     ({Token.kind == number})?
+	 ({indicator.kind == location, indicator.title == "prefix"})?
+     ({Token})
+     ({indicator.kind == location, indicator.title == "suffix"})
+	 ({indicator.kind == location, indicator.title == "prefix"})?
+   ) |
+   {neighbor}
+  )
+  ({Token.string == ","}
+   {indicator.kind == location, indicator.title == "district"}
+  )?
+  ({Token.string == ","}
+   {indicator.kind == location, indicator.title == "city"}
+  )?
+  ({Token.string == ","} 
+   {Token.kind == number, Token.length == 5}
+  )?
+)
+
+//=====================================================
+// match address
+// (i.e. near 11 5th st, brookyn, NY, 11201)
+//=====================================================
+Rule: LocationAddress
+(
+   ({indicator.kind == location, indicator.title == "near"})?
+   (ADDRESS):loc
+)
+-->
+:loc {
+  AnnotationSet locs = (AnnotationSet) bindings.get("loc");
+  
+  FeatureMap features = Factory.newFeatureMap();
+
+  try{
+    String locStr = doc.getContent().getContent(
+	  locs.firstNode().getOffset(), locs.lastNode().getOffset()).toString();
+	
+    // create new features
+	features.put("title", "location");
+    features.put("value", locStr);
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  
+  // create new annotation                            
+  outputAS.add(locs.firstNode(), locs.lastNode(), "location", features);
+}
+
+//=====================================================
+// match address between
+// (i.e. between 5th ave and 4th ave)
+//=====================================================
+Rule: LocationBetween
+(
+   {indicator.kind == location, indicator.title == "between"}
+   ((ADDRESS)
+    {indicator.kind == location, indicator.title == "and"}
+    (ADDRESS)
+   ):loc
+)
+-->
+:loc {
+  AnnotationSet locs = (AnnotationSet) bindings.get("loc");
+  
+  FeatureMap features = Factory.newFeatureMap();
+
+  try{
+    String locStr = doc.getContent().getContent(
+	  locs.firstNode().getOffset(), locs.lastNode().getOffset()).toString();
+	
+    // create new features
+	features.put("title", "location");
+    features.put("value", locStr);
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  
+  // create new annotation                            
+  outputAS.add(locs.firstNode(), locs.lastNode(), "location", features);
+}
+
+//=====================================================
+// match zip code (i.e. 11201)
+//=====================================================
+Rule: LocationZip
+({Token.kind == number, Token.length == 5}):loc
+-->
+:loc {
+  AnnotationSet locs = (AnnotationSet) bindings.get("loc");
+  
+  FeatureMap features = Factory.newFeatureMap();
+
+  try{
+    String locStr = doc.getContent().getContent(
+	  locs.firstNode().getOffset(), locs.lastNode().getOffset()).toString();
+	
+    // create new features
+	features.put("title", "location");
+    features.put("value", locStr);
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  
+  // create new annotation                            
+  outputAS.add(locs.firstNode(), locs.lastNode(), "location", features);
+}
+
+//=====================================================
+// match nearby (i.e. nearby / in here)
+//=====================================================
+Rule: LocationNearby
+({indicator.kind == location, indicator.title == "here"}):loc
+-->
+:loc {
+  AnnotationSet locs = (AnnotationSet) bindings.get("loc");
+  
+  FeatureMap features = Factory.newFeatureMap();
+	
+  // create new features
+  features.put("title", "location");
+  features.put("value", "broolyn heights"); // default loaction
+  
+  // create new annotation                            
+  outputAS.add(locs.firstNode(), locs.lastNode(), "location", features);
+}

@@ -1,0 +1,126 @@
+Phase: Question
+Input: Token Lookup indicator restaurant cuisine location neighbor feature time
+Options: control = first
+
+//=====================================================
+// match question type (i.e. are there any restaurant / where is a restaurant nearby)
+//=====================================================
+Rule: Question1
+Priority: 50
+(
+  ({indicator.kind == question, indicator.title == "start"})
+  ({Token})*
+  ({indicator.kind == question, indicator.title == "restaurant"})
+  ({Token})*
+  ({Token.string == "?"} | {Token.string == "."})
+):question
+-->
+:question {
+  AnnotationSet questions = (AnnotationSet) bindings.get("question");
+  FeatureMap features = Factory.newFeatureMap();
+	  
+  // create new features
+  features.put("kind", "search");
+  
+  // create new annotation
+  outputAS.add(questions.firstNode(), questions.lastNode(), "question", features);
+}
+
+//=====================================================
+// match question type (i.e. where can i find the <restaurant name>)
+//=====================================================
+Rule: Question2
+(
+  ({indicator.kind == question, indicator.title == "start"})
+  ({Token})*
+  ({restaurant})
+  ({Token})*
+  ({Token.string == "?"} | {Token.string == "."})
+):question
+-->
+:question {
+  AnnotationSet questions = (AnnotationSet) bindings.get("question");
+  FeatureMap features = Factory.newFeatureMap();
+	  
+  // create new features
+  features.put("kind", "ask");
+  features.put("info", "cafe_address");
+
+  // create new annotation
+  outputAS.add(questions.firstNode(), questions.lastNode(), "question", features);
+}
+
+//=====================================================
+// match question type (i.e. does the <restaurant name> open now)
+//=====================================================
+Rule: Question3
+(
+  ({indicator.kind == question, indicator.title == "check"} | 
+   {Token.string ==~ "(?i)is"} | {Token.string ==~ "(?i)was"})
+  ({Token})*
+  ({restaurant})
+  ({Token})*
+  ({Token.string == "?"} | {Token.string == "."})
+):question
+-->
+:question {
+  AnnotationSet questions = (AnnotationSet) bindings.get("question");
+  FeatureMap features = Factory.newFeatureMap();
+	  
+  // create new features
+  features.put("kind", "check");
+
+  // create new annotation
+  outputAS.add(questions.firstNode(), questions.lastNode(), "question", features);
+}
+
+//=====================================================
+// match question type (i.e. what is the address of <restaurant name>?)
+//=====================================================
+Rule: Question4
+(
+  ({indicator.kind == question, indicator.title == "ask"})
+  ({Token})*
+  ({indicator.kind == question, indicator.title == "info"}):info
+  ({Token})*
+  ({restaurant})
+  ({Token})*
+  ({Token.string == "?"} | {Token.string == "."})
+):question
+-->
+:question {
+  AnnotationSet questions = (AnnotationSet) bindings.get("question");
+  AnnotationSet infos = (AnnotationSet) bindings.get("info");
+  FeatureMap features = Factory.newFeatureMap();
+	  
+  // create new features
+  //features.put("kind", infos.iterator().next().getFeatures().get("string"));
+  features.put("kind", "ask");
+  features.put("info", infos.iterator().next().getFeatures().get("value"));
+
+  // create new annotation
+  outputAS.add(questions.firstNode(), questions.lastNode(), "question", features);
+}
+
+//=====================================================
+// match question type (i.e. brooklyn?)
+//=====================================================
+Rule: Question5
+(
+  ({Token.string != "?", Token.string != "."})*
+  ({cuisine} | {location} | {neighbor} | {restaurant} | {feature})
+  ({indicator.kind == question, indicator.title == "restaurant"})?
+  ({Token.string != "?", Token.string != "."})*
+  ({Token.string == "?"} | {Token.string == "."})
+):question
+-->
+:question {
+  AnnotationSet questions = (AnnotationSet) bindings.get("question");
+  FeatureMap features = Factory.newFeatureMap();
+	  
+  // create new features
+  features.put("kind", "search");
+
+  // create new annotation
+  outputAS.add(questions.firstNode(), questions.lastNode(), "question", features);
+}

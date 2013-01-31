@@ -1,0 +1,246 @@
+Phase: Feature
+Input: Token Lookup indicator feature
+Options: control = appelt
+
+//=====================================================
+// match general feature (i.e. has TV / doesn't have TV)
+//=====================================================
+Rule: GeneralFeature
+(
+  (({indicator.kind == feature, indicator.title == "negative"}):tag1)?
+  ({indicator.kind == feature, indicator.title == "provide"})
+  (({indicator.kind == feature, indicator.title == "negative"}):tag2)?
+  ({feature.kind=="general"}):feat
+)
+-->
+:feat {
+  AnnotationSet feats = (AnnotationSet) bindings.get("feat");
+  FeatureMap features = feats.iterator().next().getFeatures();
+  
+  AnnotationSet tag1s = (AnnotationSet) bindings.get("tag1");
+  AnnotationSet tag2s = (AnnotationSet) bindings.get("tag2");
+  
+  // create new features
+  features.put("value", ((tag1s != null || tag2s != null) ? "no" : "yes"));
+}
+
+//=====================================================
+// match good feature (i.e. good for kids / not for groups)
+//=====================================================
+Rule: GoodFeature
+(
+  (({indicator.kind == feature, indicator.title == "negative"}):tag1)?
+  ({indicator.kind == feature, indicator.title == "goodfor"})
+  ({feature.kind=="goodfor"}):feat
+)
+-->
+:feat {
+  AnnotationSet feats = (AnnotationSet) bindings.get("feat");
+  FeatureMap features = feats.iterator().next().getFeatures();
+  
+  AnnotationSet tag1s = (AnnotationSet) bindings.get("tag1");
+
+  // create new features
+  features.put("value", ((tag1s != null) ? "no" : "yes"));
+}
+
+//=====================================================
+// match accept feature (i.e. accept credit cards / not allow smoking)
+//=====================================================
+Rule: AllowFeature
+(
+  (({indicator.kind == feature, indicator.title == "negative"}):tag1)?
+  ({indicator.kind == feature, indicator.title == "allow"})
+  (({indicator.kind == feature, indicator.title == "negative"}):tag2)?
+  ({feature.kind=="allow"}):feat
+)
+-->
+:feat {
+  AnnotationSet feats = (AnnotationSet) bindings.get("feat");
+  FeatureMap features = feats.iterator().next().getFeatures();
+  
+  AnnotationSet tag1s = (AnnotationSet) bindings.get("tag1");
+  AnnotationSet tag2s = (AnnotationSet) bindings.get("tag2");
+
+  // create new features
+  features.put("value", ((tag1s != null || tag2s != null) ? "no" : "yes"));
+}
+
+//=====================================================
+// match meals served (i.e. lunch / breakfast)
+// match music (i.e. DJ / Karaoke)
+// match ambience (i.e. is romantic)
+// match attire (i.e. is casual)
+//=====================================================
+Rule: MealsFeature
+(
+  ({feature.kind=="meals"} | 
+   {feature.kind=="ambience"} |
+   {feature.kind=="attire"}
+   ):feat
+)
+-->
+:feat {
+  AnnotationSet feats = (AnnotationSet) bindings.get("feat");
+  FeatureMap features = feats.iterator().next().getFeatures();
+  
+  // create new features
+  features.put("value", features.get("string"));
+}
+
+//=====================================================
+// match wi-fi (i.e. has wifi / paid wi-fi)
+// match alcohol (i.e. Full Bar / bear)
+//=====================================================
+Rule: WifiFeature
+(
+  (({indicator.kind == feature, indicator.title == "negative"}):tag1)?
+  ({indicator.kind == feature, indicator.title == "provide"})
+  (({indicator.kind == feature, indicator.title == "negative"}):tag2)?
+  ({feature.kind=="wifi"} | 
+   {feature.kind=="alcohol"}):feat
+)
+-->
+:feat {
+  AnnotationSet feats = (AnnotationSet) bindings.get("feat");
+  FeatureMap features = feats.iterator().next().getFeatures();
+  
+  AnnotationSet tag1s = (AnnotationSet) bindings.get("tag1");
+  AnnotationSet tag2s = (AnnotationSet) bindings.get("tag2");
+  
+  // create new features
+  if(tag1s != null || tag2s != null)
+  {
+    features.remove("value");
+    features.put("value", "no");
+  }
+}
+
+//=====================================================
+// match noise (i.e. is not too noisy)
+//=====================================================
+Rule: NoiceFeature
+(
+  (({indicator.kind == feature, indicator.title == "negative"}):tag1)?
+  ({indicator.kind == feature, indicator.title == "level"})?
+  ({feature.kind=="noise"}):feat
+)
+-->
+:feat {
+  AnnotationSet feats = (AnnotationSet) bindings.get("feat");
+  FeatureMap features = feats.iterator().next().getFeatures();
+  
+  AnnotationSet tag1s = (AnnotationSet) bindings.get("tag1");
+  
+  // create new features
+  if(tag1s != null)
+  {
+    String value = features.get("value").toString();
+	features.remove("value");
+	
+	if(value.equals("Loud")) {
+      features.put("value", "quiet"); }
+	else {
+      features.put("value", "average"); }
+  }
+}
+
+//=====================================================
+// match price (i.e. is not too cheap)
+//=====================================================
+Rule: PriceFeature
+(
+  (({indicator.kind == feature, indicator.title == "negative"}):tag1)?
+  ({indicator.kind == feature, indicator.title == "level"})?
+  ({feature.kind=="price"}):feat
+)
+-->
+:feat {
+  AnnotationSet feats = (AnnotationSet) bindings.get("feat");
+  FeatureMap features = feats.iterator().next().getFeatures();
+  
+  AnnotationSet tag1s = (AnnotationSet) bindings.get("tag1");
+  
+  // create new features
+  if(tag1s != null)
+  {
+    String value = features.get("value").toString();
+	features.remove("value");
+	
+	if(value.equals("$") || value.equals("$$")) {
+      features.put("value", "$$$"); }
+	else {
+      features.put("value", "$"); }
+  }
+}
+
+//=====================================================
+// match rating (i.e. is nice / good)
+//=====================================================
+Rule: RateFeature
+(
+  (({indicator.kind == feature, indicator.title == "negative"}):tag1)?
+  ({indicator.kind == feature, indicator.title == "level"})?
+  ({Token.string == "good"} | {Token.string == "nice"}):feat
+  {Token.string != "for"}
+)
+-->
+:feat {
+  AnnotationSet feats = (AnnotationSet) bindings.get("feat");
+  FeatureMap features = Factory.newFeatureMap();
+  
+  AnnotationSet tag1s = (AnnotationSet) bindings.get("tag1");
+  	  
+  // create new features
+  features.put("title", "cafe_rating");
+  
+  // create new features
+  if(tag1s != null)
+    features.put("value", "Bad");
+  else
+    features.put("value", "Good");
+
+  // create new annotation
+  outputAS.add(feats.firstNode(), feats.lastNode(), "feature", features);
+}
+
+/*
+//=====================================================
+// match others (i.e. is cheap / not too noisy)
+//=====================================================
+Rule: OtherFeature
+(
+  (({Token.string == "not"} | {Token.string == "n't"}):tag1)?
+  ({Token.string == "too"} | {Token.string == "that"} | 
+   {Token.string == "very"} | {Token.string == "so"})?
+  ({Lookup.majorType == "feature", Lookup.kind == "ambience"} | 
+   {Lookup.majorType == "feature", Lookup.kind == "noise"} | 
+   {Lookup.majorType == "feature", Lookup.kind == "rating"} |
+   {Lookup.majorType == "feature", Lookup.kind == "price"}
+   ):feat
+  {Token.string != "for"}
+)
+-->
+:feat {
+  AnnotationSet feats = (AnnotationSet) bindings.get("feat");
+  AnnotationSet tag1s = (AnnotationSet) bindings.get("tag1");
+  
+  FeatureMap features = Factory.newFeatureMap();
+
+  try{
+    String featStr = doc.getContent().getContent(
+	  feats.firstNode().getOffset(), feats.lastNode().getOffset()).toString();
+	
+	if(tag1s != null) featStr = "not " + featStr;
+	
+    // create new features
+    features.put("value", featStr);
+	features.put("title", feats.iterator().next().getFeatures().get("title"));
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  
+  // create new annotation                            
+  outputAS.add(feats.firstNode(), feats.lastNode(), "feature", features);
+}*/

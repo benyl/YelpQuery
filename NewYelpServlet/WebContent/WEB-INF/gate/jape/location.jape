@@ -1,0 +1,111 @@
+Phase: Location
+Input: Token Lookup indicator neighbor
+Options: control = appelt
+
+//=====================================================
+// marco for address pattern
+// (i.e. 11 5th st, brookyn, NY, 11201 or east broadway, manhattan, new york)
+//=====================================================
+Macro: ADDRESS
+(
+  (
+	 ({indicator.kind == location, indicator.title == "prefix"})?
+     ({Token})
+     ({indicator.kind == location, indicator.title == "suffix"})
+	 ({indicator.kind == location, indicator.title == "prefix"})?
+  )
+  ({Token.string == ","}
+   {indicator.kind == location, indicator.title == "district"}
+  )?
+  ({Token.string == ","}
+   {indicator.kind == location, indicator.title == "city"}
+  )?
+  ({Token.string == ","} 
+   {Token.kind == number, Token.length == 5}
+  )?
+)
+
+//=====================================================
+// match address
+// (i.e. near 11 5th st, brookyn, NY, 11201)
+//=====================================================
+Rule: LocationAddress
+(
+   ({indicator.kind == location, indicator.title == "near"})?
+   (
+     (ADDRESS) |
+     {indicator.kind == location, indicator.title == "district"} |
+	 {Token.kind == number, Token.length == 5}
+   ):loc
+)
+-->
+:loc {
+  AnnotationSet locs = (AnnotationSet) bindings.get("loc");
+  
+  FeatureMap features = Factory.newFeatureMap();
+
+  try{
+    String locStr = doc.getContent().getContent(
+	  locs.firstNode().getOffset(), locs.lastNode().getOffset()).toString();
+	
+    // create new features
+	features.put("title", "cafe_address");
+    features.put("value", locStr.toLowerCase());
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  
+  // create new annotation                            
+  outputAS.add(locs.firstNode(), locs.lastNode(), "location", features);
+}
+
+//=====================================================
+// match nearby (i.e. nearby / in here)
+//=====================================================
+Rule: LocationNearby
+({indicator.kind == location, indicator.title == "here"}):loc
+-->
+:loc {
+  AnnotationSet locs = (AnnotationSet) bindings.get("loc");
+  
+  FeatureMap features = Factory.newFeatureMap();
+	
+  // create new features
+  features.put("title", "cafe_address");
+  features.put("value", "brooklyn"); // default loaction: brooklyn
+  
+  // create new annotation                            
+  outputAS.add(locs.firstNode(), locs.lastNode(), "location", features);
+}
+
+//=====================================================
+// match neighbor
+// (i.e. brooklyn heights)
+//=====================================================
+/*Rule: neighbour
+(
+   ({indicator.kind == location, indicator.title == "near"})?
+   ({neighbor}):loc
+)
+-->
+:loc {
+  AnnotationSet locs = (AnnotationSet) bindings.get("loc");
+  
+  FeatureMap features = Factory.newFeatureMap();
+
+  try{
+    String locStr = doc.getContent().getContent(
+	  locs.firstNode().getOffset(), locs.lastNode().getOffset()).toString();
+	
+    // create new features
+	features.put("title", "neighbor");
+    features.put("value", locStr);
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  
+  // create new annotation                            
+  outputAS.add(locs.firstNode(), locs.lastNode(), "location", features);
+}*/

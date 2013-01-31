@@ -1,0 +1,71 @@
+Imports: {
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Date;
+}
+
+Phase: Time
+Input: Token Lookup indicator
+Options: control = appelt
+
+//=====================================================
+// match open time (i.e. open at 7:00 pm)
+//=====================================================
+Rule: Time
+(
+  {indicator.kind == time, indicator.title == "open"}
+  ({indicator.kind == time, indicator.title == "prep"})?
+  ({Token.kind == number, Token.length <= 2}
+   ({Token.string == ":"} 
+   {Token.kind == number, Token.length <= 2})? 
+   ({indicator.kind == time, indicator.title == "ampm"})?
+   ({indicator.kind == time, indicator.title == "weekday"})?
+  ):time
+)
+-->
+:time {
+  AnnotationSet times = (AnnotationSet) bindings.get("time");
+  FeatureMap features = Factory.newFeatureMap();
+
+  try{
+    String timeStr = doc.getContent().getContent(
+	  times.firstNode().getOffset(), times.lastNode().getOffset()).toString();
+	
+    // create new features
+	features.put("title", "time");
+    features.put("value", timeStr);
+
+  }catch(InvalidOffsetException ioe){
+    throw new GateRuntimeException(ioe);
+  }
+  
+  // create new annotation                            
+  outputAS.add(times.firstNode(), times.lastNode(), "time", features);
+}
+
+//=====================================================
+// match open time (i.e. open 24 hours / open now)
+//=====================================================
+Rule: OpenNow
+(
+  {indicator.kind == time, indicator.title == "open"}
+  ({indicator.kind == time, indicator.title == "anytime"})
+):time
+-->
+:time {
+  AnnotationSet times = (AnnotationSet) bindings.get("time");
+  
+  FeatureMap features = Factory.newFeatureMap();
+
+  SimpleDateFormat format = new SimpleDateFormat("hh:mm aa EEE");
+  Date date = new Date();
+  //System.out.println(format.format(date));
+		
+  // create new features
+  features.put("title", "time");
+  features.put("value", format.format(date));
+
+  // create new annotation                            
+  outputAS.add(times.firstNode(), times.lastNode(), "time", features);
+}
